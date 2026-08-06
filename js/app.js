@@ -1,6 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
-  let currentFormat = 'A';
   let userImage = null;
+
+  let cropScale = 1, minCropScale = 1;
+  let cropX = 0, cropY = 0;
+  let isDragging = false;
+  let dragStartX, dragStartY;
 
   const titles = [
     "Goa Beach Hacker",
@@ -14,62 +18,31 @@ document.addEventListener('DOMContentLoaded', () => {
   const canvas = document.getElementById('previewCanvas');
   const ctx = canvas.getContext('2d');
   
-  const btnFormatA = document.getElementById('btnFormatA');
-  const btnFormatB = document.getElementById('btnFormatB');
-  const formatBFields = document.getElementById('formatBFields');
+  const stepUpload = document.getElementById('step-upload');
+  const stepCrop = document.getElementById('step-crop');
+  const stepDetails = document.getElementById('step-details');
   
   const imageInput = document.getElementById('imageInput');
-  const uploadLabel = document.getElementById('uploadLabel');
   const loadingIndicator = document.getElementById('loadingIndicator');
-  
+  const cropContainer = document.getElementById('cropContainer');
+  const cropImage = document.getElementById('cropImage');
+  const zoomSlider = document.getElementById('zoomSlider');
+  const btnConfirmCrop = document.getElementById('btnConfirmCrop');
+
   const inputName = document.getElementById('inputName');
   const inputRole = document.getElementById('inputRole');
   const inputTitle = document.getElementById('inputTitle');
   const btnRandomize = document.getElementById('btnRandomize');
-  
   const btnDownload = document.getElementById('btnDownload');
   const btnShare = document.getElementById('btnShare');
+  const btnReset = document.getElementById('btnReset'); // NEW RESET BUTTON
 
-  createPlaceholderImage();
-
-  btnFormatA.addEventListener('click', () => setFormat('A'));
-  btnFormatB.addEventListener('click', () => setFormat('B'));
-  imageInput.addEventListener('change', handleImageUpload);
-  inputName.addEventListener('input', renderGraphic);
-  inputRole.addEventListener('input', renderGraphic);
-  inputTitle.addEventListener('input', renderGraphic);
-  btnRandomize.addEventListener('click', generateRandomTitle);
-  btnDownload.addEventListener('click', downloadImage);
-  btnShare.addEventListener('click', shareToX);
-
-  function setFormat(format) {
-    currentFormat = format;
-    const activeClass = "py-2.5 px-4 text-sm font-bold rounded-xl border-2 border-yellow-400 bg-yellow-400 text-slate-950 transition-all shadow-lg shadow-yellow-400/20";
-    const inactiveClass = "py-2.5 px-4 text-sm font-semibold rounded-xl border border-emerald-800 bg-emerald-950/60 text-emerald-300 hover:text-white transition-all";
-
-    if (format === 'A') {
-      btnFormatA.className = activeClass;
-      btnFormatB.className = inactiveClass;
-      formatBFields.classList.add('hidden');
-    } else {
-      btnFormatB.className = activeClass;
-      btnFormatA.className = inactiveClass;
-      formatBFields.classList.remove('hidden');
-    }
-    renderGraphic();
-  }
-
-  function generateRandomTitle() {
-    inputTitle.value = titles[Math.floor(Math.random() * titles.length)];
-    renderGraphic();
-  }
-
-  async function handleImageUpload(e) {
+  // STEP 1: UPLOAD LOGIC
+  imageInput.addEventListener('change', async (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
     loadingIndicator.classList.remove('hidden');
-    uploadLabel.innerText = file.name;
 
     try {
       let blob = file;
@@ -82,176 +55,372 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const reader = new FileReader();
       reader.onload = (event) => {
-        const img = new Image();
-        img.onload = () => {
-          userImage = img;
+        cropImage.src = event.target.result;
+        cropImage.onload = () => {
           loadingIndicator.classList.add('hidden');
-          renderGraphic();
+          initCropper();
         };
-        img.src = event.target.result;
       };
       reader.readAsDataURL(blob);
     } catch (err) {
       alert('Error processing image file. Please upload a standard JPG or PNG.');
       loadingIndicator.classList.add('hidden');
-      uploadLabel.innerText = 'Click to browse or drag photo';
+    }
+  });
+
+  // STEP 2: CROPPER LOGIC
+  function initCropper() {
+    stepUpload.classList.add('hidden');
+    stepCrop.classList.remove('hidden');
+
+    const cw = cropContainer.clientWidth;
+    const ch = cropContainer.clientHeight;
+    
+    minCropScale = Math.max(cw / cropImage.naturalWidth, ch / cropImage.naturalHeight);
+    cropScale = minCropScale;
+    
+    zoomSlider.min = minCropScale;
+    zoomSlider.max = minCropScale * 3;
+    zoomSlider.value = cropScale;
+
+    cropX = (cw - cropImage.naturalWidth * cropScale) / 2;
+    cropY = (ch - cropImage.naturalHeight * cropScale) / 2;
+    
+    updateCropTransform();
+  }
+
+  function updateCropTransform() {
+    cropImage.style.transform = `translate(${cropX}px, ${cropY}px) scale(${cropScale})`;
+  }
+
+  cropContainer.addEventListener('mousedown', e => { 
+    isDragging = true; 
+    dragStartX = e.clientX - cropX; 
+    dragStartY = e.clientY - cropY; 
+  });
+  window.addEventListener('mousemove', e => { 
+    if(!isDragging) return; 
+    cropX = e.clientX - dragStartX; 
+    cropY = e.clientY - dragStartY; 
+    updateCropTransform(); 
+  });
+  window.addEventListener('mouseup', () => isDragging = false);
+
+  cropContainer.addEventListener('touchstart', e => { 
+    isDragging = true; 
+    dragStartX = e.touches[0].clientX - cropX; 
+    dragStartY = e.touches[0].clientY - cropY; 
+  });
+  window.addEventListener('touchmove', e => { 
+    if(!isDragging) return; 
+    cropX = e.touches[0].clientX - dragStartX; 
+    cropY = e.touches[0].clientY - dragStartY; 
+    updateCropTransform(); 
+    e.preventDefault(); 
+  }, { passive: false });
+  window.addEventListener('touchend', () => isDragging = false);
+
+  zoomSlider.addEventListener('input', e => {
+    const oldScale = cropScale;
+    cropScale = parseFloat(e.target.value);
+    const cw = cropContainer.clientWidth / 2;
+    const ch = cropContainer.clientHeight / 2;
+    cropX = cw - (cw - cropX) * (cropScale / oldScale);
+    cropY = ch - (ch - cropY) * (cropScale / oldScale);
+    updateCropTransform();
+  });
+
+  btnConfirmCrop.addEventListener('click', () => {
+    const offCanvas = document.createElement('canvas');
+    const OUT_SIZE = 800; 
+    offCanvas.width = OUT_SIZE;
+    offCanvas.height = OUT_SIZE;
+    const oCtx = offCanvas.getContext('2d');
+    
+    const ratio = OUT_SIZE / cropContainer.clientWidth;
+    
+    oCtx.drawImage(
+      cropImage,
+      cropX * ratio,
+      cropY * ratio,
+      cropImage.naturalWidth * cropScale * ratio,
+      cropImage.naturalHeight * cropScale * ratio
+    );
+
+    const finalImg = new Image();
+    finalImg.onload = () => {
+      userImage = finalImg;
+      stepCrop.classList.add('hidden');
+      stepDetails.classList.remove('hidden');
+      renderGraphic();
+      updateButtonState();
+    };
+    finalImg.src = offCanvas.toDataURL('image/png');
+  });
+
+  // STEP 3: DETAILS & BUTTON EVENTS
+  inputName.addEventListener('input', () => { renderGraphic(); updateButtonState(); });
+  inputRole.addEventListener('input', () => { renderGraphic(); updateButtonState(); });
+  inputTitle.addEventListener('input', () => { renderGraphic(); updateButtonState(); });
+  
+  btnRandomize.addEventListener('click', () => {
+    inputTitle.value = titles[Math.floor(Math.random() * titles.length)];
+    renderGraphic();
+    updateButtonState();
+  });
+  
+  btnDownload.addEventListener('click', downloadImage);
+  btnShare.addEventListener('click', shareToX);
+
+  // NEW: RESET LOGIC
+  btnReset.addEventListener('click', () => {
+    // Clear State
+    userImage = null;
+    imageInput.value = '';
+    inputName.value = '';
+    inputRole.value = '';
+    inputTitle.value = 'Goa Beach Hacker';
+    
+    // Clear Canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    // Reset UI to start
+    stepDetails.classList.add('hidden');
+    stepCrop.classList.add('hidden');
+    stepUpload.classList.remove('hidden');
+    
+    updateButtonState();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  function updateButtonState() {
+    const hasDetails = inputName.value.trim() !== '' && inputRole.value.trim() !== '';
+    if (hasDetails) {
+      btnDownload.disabled = false;
+      btnShare.disabled = false;
+      btnDownload.classList.remove('opacity-50', 'cursor-not-allowed');
+      btnShare.classList.remove('opacity-50', 'cursor-not-allowed');
+    } else {
+      btnDownload.disabled = true;
+      btnShare.disabled = true;
+      btnDownload.classList.add('opacity-50', 'cursor-not-allowed');
+      btnShare.classList.add('opacity-50', 'cursor-not-allowed');
     }
   }
 
-  function createPlaceholderImage() {
-    const pCanvas = document.createElement('canvas');
-    pCanvas.width = 400;
-    pCanvas.height = 400;
-    const pCtx = pCanvas.getContext('2d');
-    pCtx.fillStyle = '#0b3b2c';
-    pCtx.fillRect(0, 0, 400, 400);
-    pCtx.fillStyle = '#facc15';
-    pCtx.font = 'bold 20px "Space Grotesk", sans-serif';
-    pCtx.textAlign = 'center';
-    pCtx.fillText('Photo Preview', 200, 205);
-
-    const img = new Image();
-    img.onload = () => {
-      userImage = img;
-      renderGraphic();
-    };
-    img.src = pCanvas.toDataURL();
-  }
-
+  // =====================================
+  // UPDATED: BEAUTIFUL CARD RENDERING
+  // =====================================
   function renderGraphic() {
     if (!userImage) return;
-    currentFormat === 'A' ? renderFormatA() : renderFormatB();
-  }
 
-  // Format A: Official Green & Sunshine Yellow PFP Frame
-  function renderFormatA() {
-    const size = 1080;
-    canvas.width = size;
-    canvas.height = size;
-    ctx.clearRect(0, 0, size, size);
-    drawImageCover(userImage, 0, 0, size, size);
-
-    // Sunshine Yellow Border Frame
-    const borderWidth = 40;
-    ctx.strokeStyle = '#facc15';
-    ctx.lineWidth = borderWidth;
-    ctx.strokeRect(borderWidth / 2, borderWidth / 2, size - borderWidth, size - borderWidth);
-
-    // Bottom Branding Pill (Deep Forest Green with Yellow Text)
-    const padding = 50;
-    const boxWidth = 380;
-    const boxHeight = 90;
-    
-    ctx.fillStyle = '#0b3b2c';
-    ctx.fillRect(size - boxWidth - padding, size - boxHeight - padding, boxWidth, boxHeight);
-    
-    ctx.strokeStyle = '#facc15';
-    ctx.lineWidth = 4;
-    ctx.strokeRect(size - boxWidth - padding, size - boxHeight - padding, boxWidth, boxHeight);
-
-    ctx.fillStyle = '#facc15';
-    ctx.font = 'bold 36px "Space Grotesk", sans-serif';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText('HH GOA 2026', size - (boxWidth / 2) - padding, size - (boxHeight / 2) - padding);
-  }
-
-  // Format B: Official Builder ID Pass
-  function renderFormatB() {
     const width = 800;
     const height = 1200;
     canvas.width = width;
     canvas.height = height;
 
-    // Rich Forest Green Card Background
-    ctx.fillStyle = '#0b3b2c';
+    // 1. Rich Background Gradient
+    const bgGrad = ctx.createLinearGradient(0, 0, 0, height);
+    bgGrad.addColorStop(0, '#022c22'); // Dark edge
+    bgGrad.addColorStop(0.4, '#064e3b'); // Rich center
+    bgGrad.addColorStop(1, '#022c22'); // Dark edge
+    ctx.fillStyle = bgGrad;
     ctx.fillRect(0, 0, width, height);
 
-    // Top Header Banner with Sunshine Yellow Accent
-    ctx.fillStyle = '#facc15';
-    ctx.fillRect(0, 0, width, 16);
+    // 2. Faint Inner Border (Print Feel)
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(15, 15, width - 30, height - 30);
 
+    // 3. Tropical Waves Overlay on Bottom
+    ctx.fillStyle = '#064e3b';
+    ctx.beginPath();
+    ctx.moveTo(0, 930);
+    ctx.bezierCurveTo(200, 860, 600, 1000, width, 930);
+    ctx.lineTo(width, height); ctx.lineTo(0, height); ctx.fill();
+
+    ctx.fillStyle = '#022c22';
+    ctx.beginPath();
+    ctx.moveTo(0, 1000);
+    ctx.bezierCurveTo(300, 1060, 500, 930, width, 1000);
+    ctx.lineTo(width, height); ctx.lineTo(0, height); ctx.fill();
+
+    // 4. Lanyard Cutout Hole
+    ctx.fillStyle = '#022c22';
+    ctx.beginPath();
+    ctx.roundRect(width/2 - 50, 40, 100, 20, 10);
+    ctx.fill();
+    ctx.strokeStyle = '#facc15';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // 5. Clean Top Headers
     ctx.fillStyle = '#facc15';
-    ctx.font = 'bold 64px "Space Grotesk", sans-serif';
+    ctx.font = '900 64px "Space Grotesk", sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('HH GOA 2026', width / 2, 110);
     
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+    ctx.shadowBlur = 12;
+    ctx.shadowOffsetY = 6;
+    ctx.fillText('HH GOA 2026', width / 2, 145);
+    
+    ctx.shadowBlur = 0; 
+    ctx.shadowOffsetY = 0;
     ctx.fillStyle = '#86efac';
-    ctx.font = 'bold 22px "Space Grotesk", sans-serif';
-    ctx.fillText('OFFICIAL BUILDER PASS', width / 2, 150);
+    ctx.font = 'bold 20px "Space Grotesk", sans-serif';
+    ctx.letterSpacing = "4px"; 
+    ctx.fillText('OFFICIAL BUILDER PASS', width / 2, 190);
 
+    // 6. Premium Polaroid-Style Photo Frame
     const photoSize = 420;
     const photoX = (width - photoSize) / 2;
-    const photoY = 220;
+    const photoY = 230;
 
-    ctx.fillStyle = '#064e3b';
-    ctx.fillRect(photoX, photoY, photoSize, photoSize);
-    drawImageCover(userImage, photoX, photoY, photoSize, photoSize);
+    // Deep shadow behind photo
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.6)';
+    ctx.shadowBlur = 20;
+    ctx.shadowOffsetY = 15;
+    
+    // White backing
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(photoX - 14, photoY - 14, photoSize + 28, photoSize + 28);
+    
+    // Reset shadow & draw user image
+    ctx.shadowBlur = 0;
+    ctx.shadowOffsetY = 0;
+    ctx.drawImage(userImage, photoX, photoY, photoSize, photoSize);
 
-    // Sunshine Yellow Photo Border
+    // Thick yellow inner border
     ctx.strokeStyle = '#facc15';
-    ctx.lineWidth = 6;
-    ctx.strokeRect(photoX, photoY, photoSize, photoSize);
+    ctx.lineWidth = 4;
+    ctx.strokeRect(photoX - 14, photoY - 14, photoSize + 28, photoSize + 28);
 
-    const name = inputName.value || 'Builder Name';
-    const role = inputRole.value || 'Stack / Role';
-    const title = inputTitle.value || 'Goa Beach Hacker';
+    // 7. Tropical Decorations
+    ctx.save();
+    ctx.translate(630, 230);
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+    ctx.shadowBlur = 10;
+    ctx.fillStyle = '#15803d'; ctx.beginPath(); ctx.ellipse(40, -40, 100, 25, -Math.PI / 4, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#166534'; ctx.beginPath(); ctx.ellipse(70, 0, 90, 22, -Math.PI / 8, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#064e3b'; ctx.beginPath(); ctx.ellipse(10, -70, 70, 18, -Math.PI / 2.5, 0, Math.PI * 2); ctx.fill();
+    
+    ctx.shadowBlur = 6;
+    ctx.fillStyle = '#ca8a04'; ctx.beginPath(); ctx.arc(15, -15, 34, 0, Math.PI * 2); ctx.fill(); 
+    ctx.fillStyle = '#eab308'; ctx.beginPath(); ctx.arc(-20, 15, 30, 0, Math.PI * 2); ctx.fill(); 
+    ctx.fillStyle = '#facc15'; ctx.beginPath(); ctx.arc(30, 20, 26, 0, Math.PI * 2); ctx.fill(); 
+    
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = '#a16207';
+    ctx.beginPath(); ctx.arc(5, -20, 4, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(20, -15, 4, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(10, -5, 4, 0, Math.PI*2); ctx.fill();
+    ctx.restore();
 
-    ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 52px "Space Grotesk", sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText(name, width / 2, 730);
-
-    ctx.fillStyle = '#facc15';
-    ctx.font = 'bold 26px "Space Grotesk", sans-serif';
-    ctx.fillText(role.toUpperCase(), width / 2, 780);
-
-    // Card Details Box
-    ctx.fillStyle = '#064e3b';
-    ctx.fillRect(80, 840, width - 160, 110);
-    ctx.strokeStyle = '#059669';
-    ctx.lineWidth = 2;
-    ctx.strokeRect(80, 840, width - 160, 110);
-
-    ctx.fillStyle = '#86efac';
-    ctx.font = 'bold 16px "Space Grotesk", sans-serif';
-    ctx.fillText('DESIGNATED TITLE', width / 2, 875);
-
-    ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 26px "Space Grotesk", sans-serif';
-    ctx.fillText(title, width / 2, 920);
-
-    // Footer Bar
-    ctx.fillStyle = '#064e3b';
-    ctx.fillRect(0, height - 90, width, 90);
-    ctx.fillStyle = '#facc15';
-    ctx.font = 'bold 26px monospace';
-    ctx.fillText('#FrameInGoa', width / 2, height - 42);
-  }
-
-  function drawImageCover(img, x, y, w, h) {
-    const imgRatio = img.width / img.height;
-    const targetRatio = w / h;
-    let sw, sh, sx, sy;
-
-    if (imgRatio > targetRatio) {
-      sh = img.height;
-      sw = img.height * targetRatio;
-      sx = (img.width - sw) / 2;
-      sy = 0;
-    } else {
-      sw = img.width;
-      sh = img.width / targetRatio;
-      sx = 0;
-      sy = (img.height - sh) / 2;
+    ctx.save();
+    ctx.translate(170, 670);
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.4)';
+    ctx.shadowBlur = 8;
+    ctx.fillStyle = '#15803d'; ctx.beginPath(); ctx.ellipse(-50, 40, 70, 25, Math.PI / 4, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#166534'; ctx.beginPath(); ctx.ellipse(-60, -10, 60, 20, Math.PI / 1.2, 0, Math.PI * 2); ctx.fill();
+    
+    ctx.shadowBlur = 4;
+    ctx.fillStyle = '#ec4899';
+    for (let i = 0; i < 5; i++) {
+      ctx.rotate((Math.PI * 2) / 5);
+      ctx.beginPath(); ctx.ellipse(0, -30, 28, 45, 0, 0, Math.PI * 2); ctx.fill();
     }
-    ctx.drawImage(img, sx, sy, sw, sh, x, y, w, h);
+    ctx.fillStyle = '#be185d';
+    for (let i = 0; i < 5; i++) {
+      ctx.rotate((Math.PI * 2) / 5);
+      ctx.beginPath(); ctx.ellipse(0, -15, 12, 25, 0, 0, Math.PI * 2); ctx.fill();
+    }
+    
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = '#facc15'; ctx.beginPath(); ctx.arc(0, 0, 16, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = '#facc15'; ctx.lineWidth = 5; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(-30, -30); ctx.stroke();
+    ctx.beginPath(); ctx.arc(-30, -30, 7, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
+
+    ctx.save();
+    ctx.translate(650, 660);
+    ctx.rotate(Math.PI / 5);
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
+    ctx.shadowBlur = 6;
+    ctx.fillStyle = '#fb923c'; 
+    for(let i=0; i<5; i++) {
+      ctx.rotate((Math.PI * 2) / 5);
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(8, -15);
+      ctx.lineTo(0, -40);
+      ctx.lineTo(-8, -15);
+      ctx.closePath();
+      ctx.fill();
+    }
+    ctx.fillStyle = '#f97316'; ctx.beginPath(); ctx.arc(0, 0, 8, 0, Math.PI*2); ctx.fill();
+    ctx.restore();
+
+    // 8. Texts (Name & Role)
+    const name = inputName.value.trim() || 'YOUR NAME';
+    const role = inputRole.value.trim() || 'YOUR ROLE';
+    const title = inputTitle.value.trim() || 'Goa Beach Hacker';
+
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.6)';
+    ctx.shadowBlur = 8;
+    ctx.shadowOffsetY = 4;
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 54px "Space Grotesk", sans-serif';
+    ctx.fillText(name, width / 2, 755, 720); // capped at 720px width
+
+    ctx.shadowBlur = 0;
+    ctx.shadowOffsetY = 0;
+    ctx.fillStyle = '#facc15';
+    ctx.font = 'bold 24px "Space Grotesk", sans-serif';
+    ctx.letterSpacing = "2px";
+    ctx.fillText(role.toUpperCase(), width / 2, 805, 720);
+
+    // 9. Glassmorphism Pill Box for Title
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
+    ctx.beginPath();
+    ctx.roundRect(100, 850, width - 200, 90, 20); // soft rounded corners
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 34px "Space Grotesk", sans-serif';
+    ctx.letterSpacing = "0px";
+    ctx.textBaseline = 'middle'; 
+    ctx.fillText(title, width / 2, 895, 560);
+    ctx.textBaseline = 'alphabetic'; 
+
+    // 10. Event Details
+    ctx.fillStyle = '#facc15';
+    ctx.font = 'bold 20px monospace';
+    
+    ctx.textAlign = 'left';
+    ctx.fillText('GOA, INDIA · 28-31 OCT 2026', 80, 1025);
+    
+    ctx.textAlign = 'right';
+    ctx.fillText('2:47 PM STUDIO', width - 80, 1025);
+
+    // 11. Footer
+    ctx.fillStyle = '#064e3b';
+    ctx.fillRect(0, height - 100, width, 100);
+    
+    ctx.fillStyle = '#facc15';
+    ctx.font = 'bold 30px monospace';
+    ctx.textAlign = 'center'; 
+    ctx.textBaseline = 'middle';
+    ctx.fillText('#FrameInGoa', width / 2, height - 50);
+    ctx.textBaseline = 'alphabetic'; 
   }
 
   function downloadImage() {
     if (!userImage) return;
     const link = document.createElement('a');
-    link.download = `HH_Goa_2026_${currentFormat === 'A' ? 'PFP' : 'Badge'}.png`;
+    link.download = `HH_Goa_2026_Badge.png`;
     link.href = canvas.toDataURL('image/png');
     link.click();
   }

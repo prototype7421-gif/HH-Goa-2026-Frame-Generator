@@ -19,25 +19,23 @@
 
   <!-- ================= ANIMATED BACKGROUND SCENERY ================= -->
   <div id="animated-background" class="fixed inset-0 z-0 pointer-events-none overflow-hidden">
-    
-    <!-- 1. Sun and Rotating Rays -->
     <div class="absolute bottom-[35%] left-1/2 -translate-x-1/2 w-[800px] h-[400px] overflow-hidden">
-      <svg class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] translate-y-1/2 animate-spin-slow opacity-90" viewBox="0 0 100 100">
-        <g stroke="#facc15" stroke-width="1" stroke-linecap="round">
-          <line x1="50" y1="50" x2="50" y2="5" /><line x1="50" y1="50" x2="81.8" y2="18.2" />
-          <line x1="50" y1="50" x2="95" y2="50" /><line x1="50" y1="50" x2="81.8" y2="81.8" />
-          <line x1="50" y1="50" x2="50" y2="95" /><line x1="50" y1="50" x2="18.2" y2="81.8" />
-          <line x1="50" y1="50" x2="5" y2="50" /><line x1="50" y1="50" x2="18.2" y2="18.2" />
-          <line x1="50" y1="50" x2="67" y2="8" /><line x1="50" y1="50" x2="92" y2="33" />
-          <line x1="50" y1="50" x2="92" y2="67" /><line x1="50" y1="50" x2="67" y2="92" />
-          <line x1="50" y1="50" x2="33" y2="92" /><line x1="50" y1="50" x2="8" y2="67" />
-          <line x1="50" y1="50" x2="8" y2="33" /><line x1="50" y1="50" x2="33" y2="8" />
-        </g>
-      </svg>
+      <div class="absolute bottom-0 left-1/2 w-[800px] h-[800px] -translate-x-1/2 translate-y-1/2 opacity-90">
+        <svg class="w-full h-full animate-[spin_60s_linear_infinite]" viewBox="0 0 100 100">
+          <g stroke="#facc15" stroke-width="1" stroke-linecap="round">
+            <line x1="50" y1="50" x2="50" y2="5" /><line x1="50" y1="50" x2="81.8" y2="18.2" />
+            <line x1="50" y1="50" x2="95" y2="50" /><line x1="50" y1="50" x2="81.8" y2="81.8" />
+            <line x1="50" y1="50" x2="50" y2="95" /><line x1="50" y1="50" x2="18.2" y2="81.8" />
+            <line x1="50" y1="50" x2="5" y2="50" /><line x1="50" y1="50" x2="18.2" y2="18.2" />
+            <line x1="50" y1="50" x2="67" y2="8" /><line x1="50" y1="50" x2="92" y2="33" />
+            <line x1="50" y1="50" x2="92" y2="67" /><line x1="50" y1="50" x2="67" y2="92" />
+            <line x1="50" y1="50" x2="33" y2="92" /><line x1="50" y1="50" x2="8" y2="67" />
+            <line x1="50" y1="50" x2="8" y2="33" /><line x1="50" y1="50" x2="33" y2="8" />
+          </g>
+        </svg>
+      </div>
       <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[350px] h-[175px] bg-yellow-400 rounded-t-full shadow-[0_0_80px_rgba(250,204,21,0.3)]"></div>
     </div>
-
-    <!-- 2. Ocean Horizon Line & Water Body -->
     <div class="absolute bottom-[10%] left-0 w-full h-[30%] bg-gradient-to-b from-[#064e3b] to-[#022c22] border-t-2 border-yellow-400">
       <div class="absolute top-4 left-1/2 w-80 h-2 bg-yellow-400 rounded-full animate-water-1"></div>
       <div class="absolute top-10 left-1/2 w-64 h-2 bg-yellow-400/90 rounded-full animate-water-2"></div>
@@ -45,62 +43,42 @@
       <div class="absolute top-24 left-1/2 w-32 h-2 bg-yellow-400/60 rounded-full animate-water-4"></div>
       <div class="absolute top-32 left-1/2 w-16 h-1.5 bg-yellow-400/40 rounded-full animate-water-5"></div>
     </div>
-
-    <!-- 3. White Sand Beach Shoreline -->
     <svg class="absolute bottom-0 left-0 w-full h-[22%] min-h-[140px] pointer-events-none drop-shadow-2xl" viewBox="0 0 1440 200" preserveAspectRatio="none">
       <path d="M0,70 C300,120 600,10 1000,50 C1200,70 1440,30 1440,30 L1440,200 L0,200 Z" fill="#ffffff" stroke="#064e3b" stroke-width="4"/>
       <path d="M0,100 C350,150 700,40 1000,80 C1200,100 1440,60 1440,60 L1440,200 L0,200 Z" fill="#f8fafc" stroke="#059669" stroke-width="2"/>
     </svg>
-
-    <!-- 4. Lounge Chairs & Umbrella (Left) -->
     <svg class="absolute bottom-4 left-4 md:left-24 h-[140px] w-auto opacity-100 pointer-events-none" viewBox="0 0 200 200">
-      <!-- Shadow -->
       <ellipse cx="100" cy="180" rx="70" ry="12" fill="#e2e8f0" opacity="0.8"/>
-      <!-- Pole -->
       <line x1="100" y1="170" x2="100" y2="60" stroke="#064e3b" stroke-width="6" stroke-linecap="round"/>
-      <!-- Canopy -->
       <path d="M 20,90 Q 100,10 180,90 Z" fill="#ffffff" stroke="#064e3b" stroke-width="5" stroke-linejoin="round"/>
       <path d="M 60,90 Q 100,25 140,90 Z" fill="#facc15" stroke="#064e3b" stroke-width="3" stroke-linejoin="round"/>
-      <!-- Left Chair -->
       <g transform="translate(15, 140)">
          <path d="M 5,20 L 30,20 L 45,0" fill="none" stroke="#064e3b" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
          <line x1="15" y1="20" x2="15" y2="35" stroke="#064e3b" stroke-width="4" stroke-linecap="round"/>
          <line x1="30" y1="20" x2="30" y2="35" stroke="#064e3b" stroke-width="4" stroke-linecap="round"/>
       </g>
-      <!-- Right Chair -->
       <g transform="translate(110, 140)">
          <path d="M 60,20 L 35,20 L 20,0" fill="none" stroke="#064e3b" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
          <line x1="50" y1="20" x2="50" y2="35" stroke="#064e3b" stroke-width="4" stroke-linecap="round"/>
          <line x1="35" y1="20" x2="35" y2="35" stroke="#064e3b" stroke-width="4" stroke-linecap="round"/>
       </g>
     </svg>
-
-    <!-- 5. Surfboards in Sand -->
     <svg class="absolute bottom-8 right-48 md:right-72 h-[90px] w-auto opacity-100 pointer-events-none" viewBox="0 0 100 120">
        <ellipse cx="50" cy="110" rx="30" ry="8" fill="#e2e8f0" opacity="0.8"/>
-       <!-- White Board -->
        <ellipse cx="35" cy="65" rx="14" ry="45" fill="#ffffff" stroke="#064e3b" stroke-width="4" transform="rotate(-15 35 65)"/>
        <line x1="35" y1="20" x2="35" y2="110" stroke="#064e3b" stroke-width="2" transform="rotate(-15 35 65)"/>
-       <!-- Yellow Board -->
        <ellipse cx="65" cy="70" rx="14" ry="45" fill="#facc15" stroke="#064e3b" stroke-width="4" transform="rotate(15 65 70)"/>
        <line x1="65" y1="25" x2="65" y2="115" stroke="#064e3b" stroke-width="2" transform="rotate(15 65 70)"/>
     </svg>
-
-    <!-- 6. Goa Beach Shack (Right) -->
     <svg class="absolute bottom-2 right-2 md:right-16 h-[170px] w-auto opacity-100 pointer-events-none" viewBox="0 0 200 200">
        <ellipse cx="100" cy="185" rx="80" ry="12" fill="#e2e8f0" opacity="0.8"/>
-       <!-- Shack Base -->
        <rect x="30" y="80" width="140" height="100" fill="#ffffff" stroke="#064e3b" stroke-width="5" rx="2"/>
-       <!-- Counter window -->
        <rect x="45" y="105" width="110" height="40" fill="#022c22" stroke="#064e3b" stroke-width="4"/>
        <rect x="35" y="145" width="130" height="10" fill="#ffffff" stroke="#064e3b" stroke-width="4" rx="2"/>
-       <!-- Pink Sign -->
        <rect x="55" y="55" width="90" height="24" fill="#ec4899" stroke="#064e3b" stroke-width="4" rx="4"/>
        <text x="100" y="72" fill="#ffffff" font-family="'Space Grotesk', sans-serif" font-size="12" font-weight="bold" text-anchor="middle">GOA BEACH</text>
-       <!-- Roof -->
        <polygon points="15,80 100,25 185,80" fill="#ffffff" stroke="#064e3b" stroke-width="5" stroke-linejoin="round"/>
        <polygon points="100,25 185,80 100,80" fill="#f8fafc" />
-       <!-- Bar stools -->
        <line x1="60" y1="185" x2="60" y2="155" stroke="#064e3b" stroke-width="4" stroke-linecap="round"/>
        <line x1="50" y1="165" x2="70" y2="165" stroke="#064e3b" stroke-width="4" stroke-linecap="round"/>
        <line x1="100" y1="185" x2="100" y2="155" stroke="#064e3b" stroke-width="4" stroke-linecap="round"/>
@@ -108,8 +86,6 @@
        <line x1="140" y1="185" x2="140" y2="155" stroke="#064e3b" stroke-width="4" stroke-linecap="round"/>
        <line x1="130" y1="165" x2="150" y2="165" stroke="#064e3b" stroke-width="4" stroke-linecap="round"/>
     </svg>
-
-    <!-- 7. Authentic Coconut Tree (Left) -->
     <svg class="absolute bottom-0 -left-20 md:-left-8 h-[75vh] w-auto animate-sway opacity-95 pointer-events-none" viewBox="0 0 400 600" preserveAspectRatio="xMidYMax meet">
       <path d="M130 600 Q 190 300 250 150" fill="none" stroke="#022c22" stroke-width="24" stroke-linecap="round"/>
       <path d="M135 600 Q 192 300 250 150" fill="none" stroke="#064e3b" stroke-width="14" stroke-linecap="round"/>
@@ -124,8 +100,6 @@
       <circle cx="265" cy="155" r="14" fill="#facc15" />
       <circle cx="245" cy="150" r="10" fill="#ca8a04" />
     </svg>
-
-    <!-- 8. Authentic Coconut Tree (Right) -->
     <svg class="absolute bottom-0 -right-24 md:-right-12 h-[85vh] w-auto animate-sway-reverse opacity-95 pointer-events-none" viewBox="0 0 400 600" preserveAspectRatio="xMidYMax meet">
       <path d="M270 600 Q 210 300 150 150" fill="none" stroke="#022c22" stroke-width="26" stroke-linecap="round"/>
       <path d="M265 600 Q 208 300 150 150" fill="none" stroke="#064e3b" stroke-width="16" stroke-linecap="round"/>
@@ -143,7 +117,6 @@
   </div>
   <!-- ================================================================ -->
 
-
   <!-- Header -->
   <header class="relative z-10 border-b border-emerald-900/50 bg-[#064e3b]/90 backdrop-blur-md sticky top-0">
     <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
@@ -157,88 +130,124 @@
   </header>
 
   <!-- Main Workspace -->
-  <main class="relative z-10 max-w-5xl mx-auto w-full px-6 py-10 flex-1 grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
+  <main class="relative z-10 max-w-5xl mx-auto w-full px-4 py-8 flex-1 flex flex-col items-center justify-center">
     
-    <!-- Controls Form Section -->
-    <div class="space-y-6 bg-[#022c22]/90 border border-emerald-800/80 p-8 rounded-2xl backdrop-blur-xl shadow-2xl">
+    <!-- ================= STEP 1: UPLOAD ================= -->
+    <div id="step-upload" class="w-full flex flex-col items-center transition-all z-10">
       
-      <!-- Format Selection -->
-      <div>
-        <label class="block text-xs font-bold uppercase tracking-wider text-emerald-400 mb-3">1. Select Format</label>
-        <div class="grid grid-cols-2 gap-3">
-          <button id="btnFormatA" class="py-2.5 px-4 text-sm font-bold rounded-xl border border-yellow-400 bg-yellow-400 text-slate-950 transition-all shadow-md">
-            PFP Frame
-          </button>
-          <button id="btnFormatB" class="py-2.5 px-4 text-sm font-semibold rounded-xl border border-emerald-800 bg-[#064e3b]/50 text-emerald-300 hover:text-white transition-all">
-            Builder ID
-          </button>
-        </div>
+      <!-- TITLE SECTION -->
+      <div class="relative flex justify-center items-center w-full h-24 sm:h-32 mb-10 sm:mb-14 select-none z-10 -translate-y-10 sm:-translate-y-16">
+        <!-- Background Text: HACKER HOUSE -->
+        <h1 class="text-[4rem] sm:text-[6.5rem] text-[#facc15] leading-none z-10 font-serif tracking-tighter w-full text-center"
+            style="transform: scaleY(1.6) scaleX(0.85); text-shadow: 2px 4px 12px rgba(0,0,0,0.4);">
+          HACKER&nbsp;&nbsp;&nbsp;&nbsp;HOUSE
+        </h1>
+        
+        <!-- Foreground Text: गोवा (Goa) -->
+        <h2 class="absolute text-5xl sm:text-7xl font-black text-[#ff1493] z-20 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 -rotate-2"
+            style="-webkit-text-stroke: 2.5px #facc15; text-shadow: 3px 5px 15px rgba(0,0,0,0.6); font-family: system-ui, sans-serif;">
+          गोवा
+        </h2>
       </div>
 
-      <!-- File Upload -->
-      <div>
-        <label class="block text-xs font-bold uppercase tracking-wider text-emerald-400 mb-3">2. Upload Photo</label>
-        <div id="dropZone" class="relative border border-dashed border-emerald-600 hover:border-yellow-400 bg-[#064e3b]/30 rounded-xl p-8 text-center transition-all group cursor-pointer">
+      <!-- UPLOAD CARD SECTION -->
+      <div class="w-full max-w-lg bg-[#022c22]/95 border border-emerald-800/80 p-8 rounded-2xl backdrop-blur-xl shadow-2xl z-10">
+        <div class="text-center mb-6">
+          <p class="text-sm text-emerald-300 font-medium">Upload a photo to generate your official Builder Pass.</p>
+        </div>
+
+        <div id="dropZone" class="relative border-2 border-dashed border-emerald-600 hover:border-yellow-400 bg-[#064e3b]/40 rounded-xl p-10 text-center transition-all group cursor-pointer">
           <input type="file" id="imageInput" accept="image/jpeg, image/png, image/webp, image/heic" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
-          <div class="space-y-3 pointer-events-none">
-            <svg class="mx-auto h-7 w-7 text-yellow-400 group-hover:-translate-y-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <div class="space-y-4 pointer-events-none">
+            <svg class="mx-auto h-10 w-10 text-yellow-400 group-hover:-translate-y-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M12 4v12m0-12l-4 4m4-4l4 4M4 20h16"></path>
             </svg>
             <div>
-              <p id="uploadLabel" class="text-sm text-emerald-50 font-semibold">Click to browse or drag image</p>
-              <p class="text-xs text-emerald-500 mt-1">Supports JPG, PNG, & HEIC</p>
+              <p class="text-base text-emerald-50 font-bold">Click to browse or drag image</p>
+              <p class="text-xs text-emerald-400 mt-1">Supports JPG, PNG, & HEIC</p>
             </div>
           </div>
         </div>
-        <div id="loadingIndicator" class="hidden mt-3 flex items-center justify-center gap-2 text-xs text-yellow-400 font-medium font-mono">
-          <svg class="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+
+        <div id="loadingIndicator" class="hidden mt-6 flex items-center justify-center gap-2 text-sm text-yellow-400 font-medium font-mono">
+          <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
           Processing image...
         </div>
       </div>
-
-      <!-- Format B Specific Fields -->
-      <div id="formatBFields" class="space-y-4 hidden pt-2 border-t border-emerald-800/50">
-        <label class="block text-xs font-bold uppercase tracking-wider text-emerald-400">3. Badge Details</label>
-        <div>
-          <label class="block text-xs font-medium text-emerald-400 mb-1">Full Name</label>
-          <input type="text" id="inputName" value="Alex Rivera" class="w-full bg-[#064e3b]/50 border border-emerald-700 rounded-lg px-4 py-2.5 text-sm text-emerald-50 focus:outline-none focus:border-yellow-400 transition-colors">
-        </div>
-        <div>
-          <label class="block text-xs font-medium text-emerald-400 mb-1">Stack / Role</label>
-          <input type="text" id="inputRole" value="Software Engineer" class="w-full bg-[#064e3b]/50 border border-emerald-700 rounded-lg px-4 py-2.5 text-sm text-emerald-50 focus:outline-none focus:border-yellow-400 transition-colors">
-        </div>
-        <div>
-          <div class="flex items-center justify-between mb-1">
-            <label class="text-xs font-medium text-emerald-400">Builder Title</label>
-            <button id="btnRandomize" class="text-xs text-yellow-400 hover:text-yellow-300 font-bold transition-colors">Randomize</button>
-          </div>
-          <input type="text" id="inputTitle" value="Goa Beach Hacker" class="w-full bg-[#064e3b]/50 border border-emerald-700 rounded-lg px-4 py-2.5 text-sm text-emerald-50 focus:outline-none focus:border-yellow-400 transition-colors">
-        </div>
-      </div>
-
-      <!-- Action Buttons -->
-      <div class="pt-2 space-y-3">
-        <button id="btnDownload" class="w-full bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-bold py-3 rounded-xl transition-all shadow-md">
-          Download Image
-        </button>
-        <button id="btnShare" class="w-full bg-[#064e3b]/50 hover:bg-[#064e3b] text-emerald-50 border border-emerald-700 font-semibold py-3 rounded-xl transition-all flex items-center justify-center gap-2">
-          <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-          Share on X (#FrameInGoa)
-        </button>
-      </div>
-
     </div>
 
-    <!-- Live Preview Section -->
-    <div class="flex flex-col items-center justify-center space-y-4 lg:sticky lg:top-24">
-      <div class="w-full flex justify-between items-center bg-[#022c22]/90 backdrop-blur-xl p-3 px-4 rounded-xl border border-emerald-800/80 shadow-lg">
-        <span class="text-xs font-bold uppercase tracking-wider text-emerald-400">Live Preview</span>
-        <span class="text-xs font-mono text-yellow-400 font-bold flex items-center gap-2">
-          <span class="w-2 h-2 rounded-full bg-yellow-400 animate-pulse"></span> Live Render
-        </span>
+
+    <!-- ================= STEP 2: ADJUST / CROP ================= -->
+    <div id="step-crop" class="hidden w-full max-w-lg bg-[#022c22]/95 border border-emerald-800/80 p-8 rounded-2xl backdrop-blur-xl shadow-2xl transition-all z-10">
+      <div class="text-center mb-6">
+        <h2 class="text-xl font-bold text-yellow-400">Frame Your Photo</h2>
+        <p class="text-sm text-emerald-300 mt-1">Drag to pan and use the slider to zoom.</p>
       </div>
-      <div class="relative w-full max-w-md rounded-2xl overflow-hidden border-2 border-yellow-400/20 shadow-2xl bg-[#022c22] flex items-center justify-center p-2 backdrop-blur-xl">
-        <canvas id="previewCanvas" class="max-w-full h-auto object-contain block rounded-lg"></canvas>
+
+      <div id="cropContainer" class="relative w-full aspect-square bg-[#064e3b] overflow-hidden rounded-xl border-4 border-yellow-400/80 cursor-move shadow-inner shadow-black/50 touch-none">
+        <img id="cropImage" class="absolute origin-top-left max-w-none pointer-events-none" style="transform: translate(0px, 0px) scale(1);">
+      </div>
+
+      <div class="mt-6 flex items-center gap-4">
+        <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
+        <input type="range" id="zoomSlider" class="w-full h-2 bg-emerald-800 rounded-lg appearance-none cursor-pointer accent-yellow-400" min="0.1" max="3" step="0.01" value="1">
+      </div>
+
+      <button id="btnConfirmCrop" class="mt-8 w-full bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-bold py-3.5 rounded-xl transition-all shadow-lg flex items-center justify-center gap-2">
+        Confirm & Continue
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg>
+      </button>
+    </div>
+
+
+    <!-- ================= STEP 3: DETAILS & PREVIEW ================= -->
+    <div id="step-details" class="hidden w-full grid grid-cols-1 lg:grid-cols-2 gap-10 items-start z-10">
+      
+      <!-- Inputs & Actions -->
+      <div class="space-y-6 bg-[#022c22]/90 border border-emerald-800/80 p-8 rounded-2xl backdrop-blur-xl shadow-2xl">
+        <h2 class="text-lg font-bold uppercase tracking-wider text-yellow-400 border-b border-emerald-800/50 pb-3">Badge Details</h2>
+        
+        <div class="space-y-5">
+          <div>
+            <label class="block text-xs font-medium text-emerald-400 mb-1">Full Name</label>
+            <input type="text" id="inputName" value="" placeholder="Enter your name" class="w-full bg-[#064e3b]/50 border border-emerald-700 rounded-lg px-4 py-3 text-sm text-emerald-50 focus:outline-none focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400 transition-all">
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-emerald-400 mb-1">Stack / Role</label>
+            <input type="text" id="inputRole" value="" placeholder="Enter your role" class="w-full bg-[#064e3b]/50 border border-emerald-700 rounded-lg px-4 py-3 text-sm text-emerald-50 focus:outline-none focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400 transition-all">
+          </div>
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <label class="text-xs font-medium text-emerald-400">Builder Title</label>
+              <button id="btnRandomize" class="text-xs text-yellow-400 hover:text-yellow-300 font-bold transition-colors">🎲 Randomize</button>
+            </div>
+            <input type="text" id="inputTitle" value="Goa Beach Hacker" class="w-full bg-[#064e3b]/50 border border-emerald-700 rounded-lg px-4 py-3 text-sm text-emerald-50 focus:outline-none focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400 transition-all">
+          </div>
+        </div>
+
+        <div class="pt-4 border-t border-emerald-800/50 space-y-3">
+          <button id="btnDownload" disabled class="w-full bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-bold py-3.5 rounded-xl transition-all shadow-md opacity-50 cursor-not-allowed">
+            Generate Card
+          </button>
+          <button id="btnShare" disabled class="w-full bg-[#064e3b]/50 hover:bg-[#064e3b] text-emerald-50 border border-emerald-700 font-semibold py-3.5 rounded-xl transition-all flex items-center justify-center gap-2 opacity-50 cursor-not-allowed">
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            Share on X (#FrameInGoa)
+          </button>
+          
+          <!-- NEW: Generate Another Card Button -->
+          <button id="btnReset" class="w-full bg-transparent hover:bg-[#064e3b]/80 text-emerald-400 hover:text-emerald-300 font-bold py-3.5 rounded-xl border border-emerald-700 transition-all flex items-center justify-center gap-2 mt-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+            Generate Another Card
+          </button>
+
+        </div>
+      </div>
+
+      <!-- Final Result Canvas -->
+      <div class="flex flex-col items-center justify-center lg:sticky lg:top-24 mt-6 lg:mt-0">
+        <div class="relative w-full max-w-md rounded-2xl overflow-hidden border-2 border-yellow-400/20 shadow-2xl bg-[#022c22] flex items-center justify-center p-2 backdrop-blur-xl">
+          <canvas id="previewCanvas" class="max-w-full h-auto object-contain block rounded-lg"></canvas>
+        </div>
       </div>
     </div>
 
