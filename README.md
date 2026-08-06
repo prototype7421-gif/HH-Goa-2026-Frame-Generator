@@ -1,4 +1,3 @@
-
 # HH Goa 2026 - Frame & ID Card Generator
 
 A client-side web application built for the HH Goa 2026 Shortlisting Task. 
