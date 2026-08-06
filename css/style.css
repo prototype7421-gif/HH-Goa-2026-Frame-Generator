@@ -1,0 +1,56 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+body { 
+  font-family: 'Space+Grotesk', system-ui, sans-serif; 
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+canvas {
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
+}
+
+/* Official HH Goa Glow */
+.glow-yellow {
+  box-shadow: 0 0 25px -5px rgba(250, 204, 21, 0.25);
+}
+
+/* Custom Background Animations */
+@keyframes sway {
+  0% { transform: rotate(-1.5deg); }
+  100% { transform: rotate(2.5deg); }
+}
+
+@keyframes sway-reverse {
+  0% { transform: rotate(2deg); }
+  100% { transform: rotate(-1.5deg); }
+}
+
+@keyframes pulse-water {
+  0%, 100% { opacity: 0.8; transform: translateX(-50%) scaleX(1); }
+  50% { opacity: 0.2; transform: translateX(-50%) scaleX(0.85); }
+}
+
+.animate-sway {
+  animation: sway 7s ease-in-out infinite alternate;
+  transform-origin: bottom center;
+}
+
+.animate-sway-reverse {
+  animation: sway-reverse 8s ease-in-out infinite alternate;
+  transform-origin: bottom center;
+}
+
+.animate-spin-slow {
+  animation: spin 90s linear infinite;
+}
+
+/* Layered Water Reflections */
+.animate-water-1 { animation: pulse-water 4s ease-in-out infinite; }
+.animate-water-2 { animation: pulse-water 5s ease-in-out infinite 1s; }
+.animate-water-3 { animation: pulse-water 4.5s ease-in-out infinite 2s; }
+.animate-water-4 { animation: pulse-water 6s ease-in-out infinite 1.5s; }
+.animate-water-5 { animation: pulse-water 5.5s ease-in-out infinite 0.5s; }
