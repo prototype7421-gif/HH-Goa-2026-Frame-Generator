@@ -35,7 +35,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnRandomize = document.getElementById('btnRandomize');
   const btnDownload = document.getElementById('btnDownload');
   const btnShare = document.getElementById('btnShare');
-  const btnReset = document.getElementById('btnReset'); // NEW RESET BUTTON
+  const btnReset = document.getElementById('btnReset');
+
+  // Start the Live Countdown logic
+  initCountdown();
 
   // STEP 1: UPLOAD LOGIC
   imageInput.addEventListener('change', async (e) => {
@@ -172,19 +175,16 @@ document.addEventListener('DOMContentLoaded', () => {
   btnDownload.addEventListener('click', downloadImage);
   btnShare.addEventListener('click', shareToX);
 
-  // NEW: RESET LOGIC
+  // RESET LOGIC
   btnReset.addEventListener('click', () => {
-    // Clear State
     userImage = null;
     imageInput.value = '';
     inputName.value = '';
     inputRole.value = '';
     inputTitle.value = 'Goa Beach Hacker';
     
-    // Clear Canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
-    // Reset UI to start
     stepDetails.classList.add('hidden');
     stepCrop.classList.add('hidden');
     stepUpload.classList.remove('hidden');
@@ -219,20 +219,17 @@ document.addEventListener('DOMContentLoaded', () => {
     canvas.width = width;
     canvas.height = height;
 
-    // 1. Rich Background Gradient
     const bgGrad = ctx.createLinearGradient(0, 0, 0, height);
-    bgGrad.addColorStop(0, '#022c22'); // Dark edge
-    bgGrad.addColorStop(0.4, '#064e3b'); // Rich center
-    bgGrad.addColorStop(1, '#022c22'); // Dark edge
+    bgGrad.addColorStop(0, '#022c22'); 
+    bgGrad.addColorStop(0.4, '#064e3b'); 
+    bgGrad.addColorStop(1, '#022c22'); 
     ctx.fillStyle = bgGrad;
     ctx.fillRect(0, 0, width, height);
 
-    // 2. Faint Inner Border (Print Feel)
     ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
     ctx.lineWidth = 2;
     ctx.strokeRect(15, 15, width - 30, height - 30);
 
-    // 3. Tropical Waves Overlay on Bottom
     ctx.fillStyle = '#064e3b';
     ctx.beginPath();
     ctx.moveTo(0, 930);
@@ -245,7 +242,6 @@ document.addEventListener('DOMContentLoaded', () => {
     ctx.bezierCurveTo(300, 1060, 500, 930, width, 1000);
     ctx.lineTo(width, height); ctx.lineTo(0, height); ctx.fill();
 
-    // 4. Lanyard Cutout Hole
     ctx.fillStyle = '#022c22';
     ctx.beginPath();
     ctx.roundRect(width/2 - 50, 40, 100, 20, 10);
@@ -254,7 +250,6 @@ document.addEventListener('DOMContentLoaded', () => {
     ctx.lineWidth = 2;
     ctx.stroke();
 
-    // 5. Clean Top Headers
     ctx.fillStyle = '#facc15';
     ctx.font = '900 64px "Space Grotesk", sans-serif';
     ctx.textAlign = 'center';
@@ -271,31 +266,25 @@ document.addEventListener('DOMContentLoaded', () => {
     ctx.letterSpacing = "4px"; 
     ctx.fillText('OFFICIAL BUILDER PASS', width / 2, 190);
 
-    // 6. Premium Polaroid-Style Photo Frame
     const photoSize = 420;
     const photoX = (width - photoSize) / 2;
     const photoY = 230;
 
-    // Deep shadow behind photo
     ctx.shadowColor = 'rgba(0, 0, 0, 0.6)';
     ctx.shadowBlur = 20;
     ctx.shadowOffsetY = 15;
     
-    // White backing
     ctx.fillStyle = '#ffffff';
     ctx.fillRect(photoX - 14, photoY - 14, photoSize + 28, photoSize + 28);
     
-    // Reset shadow & draw user image
     ctx.shadowBlur = 0;
     ctx.shadowOffsetY = 0;
     ctx.drawImage(userImage, photoX, photoY, photoSize, photoSize);
 
-    // Thick yellow inner border
     ctx.strokeStyle = '#facc15';
     ctx.lineWidth = 4;
     ctx.strokeRect(photoX - 14, photoY - 14, photoSize + 28, photoSize + 28);
 
-    // 7. Tropical Decorations
     ctx.save();
     ctx.translate(630, 230);
     ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
@@ -360,7 +349,6 @@ document.addEventListener('DOMContentLoaded', () => {
     ctx.fillStyle = '#f97316'; ctx.beginPath(); ctx.arc(0, 0, 8, 0, Math.PI*2); ctx.fill();
     ctx.restore();
 
-    // 8. Texts (Name & Role)
     const name = inputName.value.trim() || 'YOUR NAME';
     const role = inputRole.value.trim() || 'YOUR ROLE';
     const title = inputTitle.value.trim() || 'Goa Beach Hacker';
@@ -370,7 +358,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ctx.shadowOffsetY = 4;
     ctx.fillStyle = '#ffffff';
     ctx.font = 'bold 54px "Space Grotesk", sans-serif';
-    ctx.fillText(name, width / 2, 755, 720); // capped at 720px width
+    ctx.fillText(name, width / 2, 755, 720); 
 
     ctx.shadowBlur = 0;
     ctx.shadowOffsetY = 0;
@@ -379,10 +367,9 @@ document.addEventListener('DOMContentLoaded', () => {
     ctx.letterSpacing = "2px";
     ctx.fillText(role.toUpperCase(), width / 2, 805, 720);
 
-    // 9. Glassmorphism Pill Box for Title
     ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
     ctx.beginPath();
-    ctx.roundRect(100, 850, width - 200, 90, 20); // soft rounded corners
+    ctx.roundRect(100, 850, width - 200, 90, 20); 
     ctx.fill();
     ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
     ctx.lineWidth = 1.5;
@@ -395,7 +382,6 @@ document.addEventListener('DOMContentLoaded', () => {
     ctx.fillText(title, width / 2, 895, 560);
     ctx.textBaseline = 'alphabetic'; 
 
-    // 10. Event Details
     ctx.fillStyle = '#facc15';
     ctx.font = 'bold 20px monospace';
     
@@ -405,7 +391,6 @@ document.addEventListener('DOMContentLoaded', () => {
     ctx.textAlign = 'right';
     ctx.fillText('2:47 PM STUDIO', width - 80, 1025);
 
-    // 11. Footer
     ctx.fillStyle = '#064e3b';
     ctx.fillRect(0, height - 100, width, 100);
     
@@ -417,10 +402,31 @@ document.addEventListener('DOMContentLoaded', () => {
     ctx.textBaseline = 'alphabetic'; 
   }
 
+  // =====================================
+  // ACTIONS: CONFETTI & COUNTDOWN
+  // =====================================
+
+  function triggerConfetti() {
+    if (typeof confetti === 'undefined') return;
+    const colors = ['#facc15', '#ec4899', '#ffffff', '#15803d'];
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.6 },
+      colors: colors,
+      disableForReducedMotion: true
+    });
+  }
+
   function downloadImage() {
     if (!userImage) return;
+    
+    // Trigger confetti right before download!
+    triggerConfetti();
+
     const link = document.createElement('a');
-    link.download = `HH_Goa_2026_Badge.png`;
+    const name = inputName.value.trim() || 'Hacker';
+    link.download = `HH_Goa_2026_${name.replace(/\s+/g, '_')}_Badge.png`;
     link.href = canvas.toDataURL('image/png');
     link.click();
   }
@@ -428,5 +434,35 @@ document.addEventListener('DOMContentLoaded', () => {
   function shareToX() {
     const tweetText = encodeURIComponent("Just generated my official HH Goa 2026 badge. See you at the beach! 🌴⚡ #FrameInGoa");
     window.open(`https://x.com/intent/tweet?text=${tweetText}`, '_blank');
+  }
+
+  function initCountdown() {
+    const targetDate = new Date('October 28, 2026 09:00:00').getTime();
+    
+    const elements = {
+      days: document.getElementById('countdownDays'),
+      hours: document.getElementById('countdownHours'),
+      mins: document.getElementById('countdownMinutes')
+    };
+
+    if (!elements.days) return;
+
+    function update() {
+      const now = new Date().getTime();
+      const distance = targetDate - now;
+
+      if (distance < 0) return; // Event already started
+
+      const d = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+
+      elements.days.innerText = String(d).padStart(2, '0');
+      elements.hours.innerText = String(h).padStart(2, '0');
+      elements.mins.innerText = String(m).padStart(2, '0');
+    }
+
+    update(); // Run immediately
+    setInterval(update, 1000 * 60); // Update every minute
   }
 });
